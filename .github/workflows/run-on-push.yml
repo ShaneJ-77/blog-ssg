@@ -1,0 +1,29 @@
+# run the program whenever a push to main occurs that changes the content directory
+
+name: Run SSG On Push To main
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'content/**'
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v7
+
+    - name: Set up Go
+      uses: actions/setup-go@v7
+      with:
+        go-version: '1.24.0'
+        go-version-file: go.mod
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Run SSG
+      run: go run ./cmd
