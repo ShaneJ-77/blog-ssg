@@ -15,6 +15,7 @@ cmd
 │   └── main.go
 │
 content
+│   ├── another-test.md
 │   └── test.md
 internal
 │   ├── generator
@@ -23,9 +24,9 @@ internal
 │   │   ├── frontmatter.go
 │   │   └── markdown.go
 public
-│   ├── test-post
+│   ├── another-test
 │   │   └── index.html
-│   └── next-post
+│   └── test-post
 │       └── index.html
 templates
 │  └── default.html
