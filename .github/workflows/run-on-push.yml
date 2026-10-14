@@ -2,6 +2,9 @@
 
 name: Run SSG On Push To main
 
+permissions:
+  contents: write
+
 on:
   push:
     branches: [ "main" ]
@@ -27,3 +30,14 @@ jobs:
 
     - name: Run SSG
       run: go run ./cmd
+  
+    - name: commit and push the resulting file(s)
+      run: |
+        git config --local user.email "sjovanen@gmail.com"
+        git config --local user.name "ShaneJ-77"
+        git add ./public
+        git commit -m "add: new/updated blog html file(s)"
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+        git push
+    
+
