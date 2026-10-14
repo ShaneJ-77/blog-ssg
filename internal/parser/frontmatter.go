@@ -4,17 +4,17 @@ package parser
 
 import (
 	"bytes"
-	
+
 	"gopkg.in/yaml.v3"
 )
 
 type Metadata struct {
-	Title string `yaml:"title"`
-	Endpoint string `yaml:"endpoint"`
-	Date string `yaml:"date"`
-	Tags []string `yaml:"tags"`
-	Description string `yaml:"description"`
-	Template string `yaml:"template"`
+	Title       string   `yaml:"title"`
+	Endpoint    string   `yaml:"endpoint"`
+	Date        string   `yaml:"date"`
+	Tags        []string `yaml:"tags"`
+	Description string   `yaml:"description"`
+	Template    string   `yaml:"template"`
 }
 
 func ParseFrontMatter(content []byte) (*Metadata, []byte, error) {
@@ -31,4 +31,3 @@ func ParseFrontMatter(content []byte) (*Metadata, []byte, error) {
 
 	return &metadata, bytes.Join(parts[2:], []byte("---")), nil
 }
-

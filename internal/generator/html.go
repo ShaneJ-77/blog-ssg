@@ -3,10 +3,10 @@
 package generator
 
 import (
-	"html/template"
-	"path/filepath"
-	"os"
 	"bytes"
+	"html/template"
+	"os"
+	"path/filepath"
 
 	"blog-ssg/internal/parser"
 )
@@ -16,15 +16,14 @@ type Page struct {
 	Content template.HTML
 }
 
-func MakePosts(dir string) ([]string, error){
+func MakePosts(dir string) ([]string, error) {
 	var posts []string
-	
 
 	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() && info.Name() == "drafts" {
-        	return filepath.SkipDir
-   		}
-		
+			return filepath.SkipDir
+		}
+
 		if !info.IsDir() {
 			content, err := os.ReadFile(path)
 			if err != nil {
@@ -40,9 +39,9 @@ func MakePosts(dir string) ([]string, error){
 			postFileName, err := createPage(page)
 			if err != nil {
 				return err
-		}
+			}
 
-		posts = append(posts, postFileName)
+			posts = append(posts, postFileName)
 		}
 		return nil
 	})
@@ -54,7 +53,7 @@ func MakePosts(dir string) ([]string, error){
 
 func createPage(page Page) (string, error) {
 	postFileDir := page.Metadata.Endpoint + "/index.html"
-	path := filepath.Join("public",postFileDir)
+	path := filepath.Join("public", postFileDir)
 
 	var tmpl *template.Template
 	tmpl, err := tmpl.ParseGlob("templates/*html")
@@ -73,7 +72,6 @@ func createPage(page Page) (string, error) {
 	if err := os.WriteFile(path, buf.Bytes(), 0644); err != nil {
 		return "", err
 	}
-	
+
 	return postFileDir, nil
 }
-
