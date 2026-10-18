@@ -11,5 +11,10 @@ template: default.html
 Testing the Github Action
 
 # Test Take 3
-Updating an existing file
+What does it do with a list?
+- list item 1
+- list item 2
+- list item 3
+
+Some text after the list
 
