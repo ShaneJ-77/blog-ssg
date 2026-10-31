@@ -11,6 +11,7 @@ on:
     paths:
       - 'content/**'
       - 'templates/**'
+  workflow_dispatch:
 
 jobs:
 
