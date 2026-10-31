@@ -56,7 +56,7 @@ func createPage(page Page) (string, error) {
 	path := filepath.Join("public", postFileDir)
 
 	var tmpl *template.Template
-	tmpl, err := tmpl.ParseGlob("templates/*html")
+	tmpl, err := tmpl.ParseGlob("static/templates/*html")
 	if err != nil {
 		return "", err
 	}
