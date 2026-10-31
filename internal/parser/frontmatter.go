@@ -10,6 +10,7 @@ import (
 
 type Metadata struct {
 	Title       string   `yaml:"title"`
+	Subtitle    string   `yaml:"subtitle"`
 	Endpoint    string   `yaml:"endpoint"`
 	Date        string   `yaml:"date"`
 	Tags        []string `yaml:"tags"`

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/styles/styles.css" />
+    <title>{{ .Title }}</title>
+    <meta name="description" content="{{ .Description }}">
+    <meta name="author" content="DeepSeaOwl">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <section class="header" id="id">
+        
+        <nav>
+            <ul class="links">
+                <li><span class="icon">Blog</span></li>
+                <li><a href="#learning">Learning</a></li>
+                <li><a href="#reading">Reading</a></li>
+            </ul>
+        </nav>
+    </section>
+    <section class="sub-section" id="article">
+        <div class="title">
+            <h1><span class="underline">{{ .Title }}</span></h1>
+            <h3><span class="subtitle"><i>{{ .Subtitle }}</i></span></h3>
+            <h4><span class="date">{{ .Date }}</span></h4>
+
+        </div>
+        <div class="body">
+            {{ .Content }}
+        </div>
+
+    </section>
+</body> 
+</html>

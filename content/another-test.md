@@ -1,5 +1,6 @@
 ---
 title: Github Actions Test
+subtitle: This is a subtitle
 endpoint: another-test
 date: 2026-10-14
 tags: []
