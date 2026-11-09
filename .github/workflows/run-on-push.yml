@@ -10,7 +10,7 @@ on:
     branches: [ "main" ]
     paths:
       - 'content/**'
-      - 'templates/**'
+      - 'static/templates/**'
   workflow_dispatch:
 
 jobs:
