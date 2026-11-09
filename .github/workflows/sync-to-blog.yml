@@ -1,0 +1,57 @@
+# sync html files to blog server when changes occur in the directory
+
+name: Sync HTML Files To blog
+
+on:
+  push:
+    branches: [ "main" ]
+    paths: 
+      - 'public/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: blog-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+   
+      - name: Set up SSH
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          set -eu
+          test -n "$DEPLOY_KEY"
+          test -n "$DEPLOY_KNOWN_HOSTS"
+          install -d -m 700 "$HOME/.ssh"
+          printf '%s\n' "$DEPLOY_KEY" > "$HOME/.ssh/deploy_key"
+          chmod 600 "$HOME/.ssh/deploy_key"
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/known_hosts"
+
+      - name: Deploy files
+        env:
+          DEPLOY_HOST: ${{ secrets.IP_ADDRESS }}
+        run: |
+          set -eu
+          test -n "$DEPLOY_HOST"
+          command -v rsync
+          rsync -rtzvi \
+          --omit-dir-times \
+          --no-owner \
+          --no-group \
+          --no-perms \
+          --delete \
+          -e "ssh -i $HOME/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes" \
+          ./public/ "writer@$DEPLOY_HOST:"
