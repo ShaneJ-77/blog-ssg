@@ -42,4 +42,9 @@ jobs:
         git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
         git push
     
+    - name: Trigger sync-to-blog workflow
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: gh workflow run sync-to-blog.yml --ref main
+      
 
