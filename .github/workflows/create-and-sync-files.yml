@@ -1,0 +1,76 @@
+# run the program whenever a push to main occurs that changes the content directory
+# then sync new files to server
+
+name: Create and sync files
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'content/**'
+      - 'static/templates/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: blog-deploy
+  cancel-in-progress: false
+
+jobs:
+
+  build and deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v7
+      with:
+        persist-credentials: false
+
+    - name: Set up Go
+      uses: actions/setup-go@v7
+      with:
+        go-version-file: go.mod
+        cache: true
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Generate site
+      run: go run ./cmd
+
+    - name: Set up SSH
+      env:
+        DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+        DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+      run: |
+        set -eu
+        test -n "$DEPLOY_KEY"
+        test -n "$DEPLOY_KNOWN_HOSTS"
+        install -d -m 700 "$HOME/.ssh"
+        printf '%s\n' "$DEPLOY_KEY" > "$HOME/.ssh/deploy_key"
+        chmod 600 "$HOME/.ssh/deploy_key"
+        printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+        chmod 600 "$HOME/.ssh/known_hosts"
+
+    - name: Deploy files
+      env:
+        DEPLOY_HOST: ${{ secrets.IP_ADDRESS }}
+      run: |
+        set -eu
+        test -n "$DEPLOY_HOST"
+        command -v rsync
+        rsync -rtzvi \
+        --omit-dir-times \
+        --no-owner \
+        --no-group \
+        --no-perms \
+        -e "ssh -i $HOME/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes" \
+        ./public/ "writer@$DEPLOY_HOST:"
+  
+
+      
+
