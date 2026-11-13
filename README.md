@@ -7,7 +7,7 @@ The static site files are markdown files with YAML metadata. Markdown was chosen
 ### What Does the Static Site Generator Do? 
 When run, the program goes through the files in `/content` and converts each markdown file into an html file and saves it to `/public`. If a change has been made to a file that already exists, the program will replace the file with an updated one.
 ### Github Actions 
-This project incorporates a Github Worklow that runs on any push to the main branch that changes the `/content` directory. This workflow runs the static site generator to convert changes in the markdown files into the appropriate html files in `/public` and commits the result.
+This project incorporates a Github Worklow that runs on any push to the main branch that changes the `/content` directory or the `/static/templates` directory. This workflow runs the static site generator to convert changes in the markdown files into the appropriate html files in `/public`, then rsyncs these files to the server via ssh.
 
 ## Project Layout
 ```
@@ -23,11 +23,6 @@ internal
 │   ├── parser
 │   │   ├── frontmatter.go
 │   │   └── markdown.go
-public
-│   ├── another-test
-│   │   └── index.html
-│   └── test-post
-│       └── index.html
 templates
 │  └── default.html
 .gitignore
